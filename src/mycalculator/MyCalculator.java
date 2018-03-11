@@ -7,6 +7,11 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
 
+/** The main class(driver class) of the calculator
+ * Ver.01: can do basic number calculations.
+ * @author dlshle(Xuri Li)
+ */
+
 public class MyCalculator {
 
     /*

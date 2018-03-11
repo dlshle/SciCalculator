@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
+/** Matrix class of the calculator
  *
- * @author Xuri
+ * @author dlshle(Xuri Li)
  */
 public class Matrix {
 

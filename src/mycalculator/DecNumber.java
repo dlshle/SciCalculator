@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mycalculator;
 
-import java.util.Arrays;
 
-/**
- *
- * @author Xuri
+/**Decimal Numbers class of the calculator
+ *Not yet finished
+ * @author dlshle(Xuri Li)
  */
 public class DecNumber {
 
