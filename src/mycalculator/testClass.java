@@ -187,6 +187,7 @@ public class testClass {
         vec = new Vector(comp);
         vec1 = new Vector(com2);
         System.out.println(vec.cross(vec1));
+        System.out.println(vec.crossProduct(vec1));
     }
 
 }

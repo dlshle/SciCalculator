@@ -88,27 +88,28 @@ public class Vector {
         return new Vector(com);
     }
 
-    public double cross(Vector v) {
+    public double crossProduct(Vector v) {
         if(v.dimension!=dimension)
             return Double.MIN_VALUE;
         if(dimension==3){
-            double[][] rows = new double[3][3];
-            for(int i=0;i<3;i++){
-                for(int j=0;j<3;j++){
-                    if(i==0)
-                        rows[i][j]=1;
-                    else if(i==1)
-                        rows[i][j] = components[j];
-                    else
-                        rows[i][j]=v.getComponent(j);
-                }
-            }
-            Matrix det = new Matrix(rows);
-            return det.getDeterminant();
+            cross(v).getMagnitude();
         }
         if(dimension==2)
             return components[0]*v.getComponent(1)-components[1]*v.getComponent(0);
         return Double.MIN_VALUE;
+    }
+    
+    public Vector cross(Vector v){
+        if(v.dimension!=dimension)
+            return null;
+        if(dimension==3){
+            double[] comp = new double[3];
+            comp[0] = (components[1]*v.getComponent(2)-components[2]*v.getComponent(1));
+            comp[1] = -(components[0]*v.getComponent(2)-components[2]*v.getComponent(0));
+            comp[2] = (components[0]*v.getComponent(1)-components[1]*v.getComponent(0));
+            return new Vector(comp);
+        }
+        return null;
     }
 
     public double getComponent(int index) {
