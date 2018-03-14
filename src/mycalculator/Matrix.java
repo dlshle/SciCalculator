@@ -52,6 +52,28 @@ public class Matrix {
         this.numOfCols = numOfCols;
         this.matrix = matrix;
     }
+    
+    public Matrix(ArrayList<ArrayList<Double>> matrix){
+        if(!matrix.isEmpty()){
+            this.matrix = new ArrayList<>();
+            this.numOfRows = matrix.size();
+            this.numOfCols = matrix.get(0).size();
+            for(int i=0;i<numOfRows;i++){
+                if(matrix.get(i).size()!=numOfCols){
+                    this.matrix.add(new ArrayList<>());
+                    for(int j=0;j<numOfCols;j++){
+                        this.matrix.get(i).add(matrix.get(i).get(j));
+                    }
+                }else{
+                    this.matrix.add(matrix.get(i));
+                }
+            }
+        }else{
+            this.matrix = new ArrayList<>();
+            this.numOfCols = 0;
+            this.numOfRows = 0;
+        }
+    }
 
     public Matrix() {
         this.numOfRows = 0;
@@ -90,6 +112,19 @@ public class Matrix {
             }
         }
         return true;
+    }
+    
+    public static Matrix getIdentityMatrix(int size){
+        if(!MyMath.isInteger(Math.sqrt(size))){
+            System.out.println("Invalid size.");
+            return null;
+        }
+        int row = (int) Math.sqrt(size);
+        double[][] mat = new double[row][row];
+        for(int i=0;i<row;i++){
+            mat[i][i] = 1;
+        }
+        return new Matrix(mat);
     }
 
     public boolean plugRowArray(double[] row) {
@@ -464,7 +499,7 @@ public class Matrix {
         }
         if(m.isZero())
             return 0;
-        if (m.getSize() == 4) {
+        if (m.size() == 4) {
             return m.getEntry(0, 1) * m.getEntry(1, 1) - m.getEntry(1, 0) * m.getEntry(0, 1);
         }
         double result = 0.0;
@@ -781,7 +816,7 @@ public class Matrix {
         }
         ArrayList<Double> col = new ArrayList<>(numOfCols);
         for (int i = 0; i < numOfCols; i++) {
-            col.add(getEntry(index, i));
+            col.add(getEntry(i, index));
         }
         return col;
     }
@@ -814,7 +849,7 @@ public class Matrix {
     public int getRank(){
         if(isZero()||isEmpty())
             return 0;
-        if(getSize()==1)
+        if(size()==1)
             return 1;
         int rank = 0;
         Matrix copy = deepCopy();
@@ -831,7 +866,7 @@ public class Matrix {
         HashSet<Vector> set = new HashSet<>();
         if(isZero()||isEmpty())
             return null;
-        if(getSize()==1){
+        if(size()==1){
             //since it's not all zero row/col
             set.add(new Vector(getCol(0)));
             return set;
@@ -867,6 +902,24 @@ public class Matrix {
         }
         return set;        
     }
+    
+    public HashSet<Double> getEigenvalues(){
+        return null;
+        //UNFINISHED
+    }
+    
+    public Matrix getTranspose(){
+        if(isZero())
+            return deepCopy();
+        if(isEmpty())
+            return null;
+        ArrayList<ArrayList<Double>> rows = new ArrayList<>();
+        for(int i=0;i<numOfCols;i++){
+            rows.add(getCol(i));
+        }
+        Matrix result = new Matrix(rows);
+        return result;
+    }
 
     public int getNumOfRows() {
         return numOfRows;
@@ -876,7 +929,7 @@ public class Matrix {
         return numOfCols;
     }
 
-    public int getSize() {
+    public int size() {
         return numOfRows * numOfCols;
     }
 

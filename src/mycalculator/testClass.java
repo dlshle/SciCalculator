@@ -173,7 +173,14 @@ public class testClass {
         System.out.println("colspace:\n"+mat.getColSpace());
         System.out.println("nullity:\n"+mat.getNullity());
         System.out.println("nullspace:\n"+mat.getNullSpace());
-        
+        System.out.println("-------------------------");
+        System.out.println("transpose and identity matrix");
+        System.out.println(mat);
+        System.out.println(mat.getTranspose());
+        System.out.println(Matrix.getIdentityMatrix(mat.size()));
+        System.out.println("------------------------");
+        System.out.println("digitalRoot(24566)");
+        System.out.println(MyMath.digitalRoot(24566));
     }
     
 }

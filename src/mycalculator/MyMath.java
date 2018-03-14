@@ -54,6 +54,30 @@ public class MyMath {
         return result;
     }   
     
+    public static boolean isInteger(double n){
+        return (int)n==n;
+    }
     
+    public static boolean isEven(double n){
+        return n%2!=0;
+    }
     
+    public static boolean isOdd(double n){
+        if(isEven(n))
+            return false;
+        //check if the number is integer
+        return !isInteger(n);
+    }
+    
+    public static int digitalRoot(long n){
+        if(n/10==0)
+            return (int)n;
+        int sum = (int)(n%10);
+        n/=10;
+        while(n!=0){
+            sum+=n%10;
+            n/=10;
+        }
+        return digitalRoot(sum);
+    }    
 }
