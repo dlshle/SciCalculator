@@ -133,7 +133,7 @@ public class testClass {
         System.out.println(m);
         System.out.println(m.isRREF());        
          */
-        double comp[] = {1, 3, 5.678};
+        double comp[] = {1, 3, 5};
         Vector vec = new Vector(comp);
         System.out.println(vec);
         //one col matrix
@@ -141,7 +141,7 @@ public class testClass {
         Matrix mat = new Matrix(ents);
         System.out.println(mat);
         System.out.println(vec.toMatrix());
-        double com2[] = {2.678, 4.123, 6.12};
+        double com2[] = {2, 4, 6};
         Vector vec1 = new Vector(com2);
         System.out.println(vec.add(vec1));
         System.out.println(vec.subtract(vec1));
@@ -183,6 +183,10 @@ public class testClass {
         System.out.println(MyMath.digitalRoot(24566));
         System.out.println(MyCalculator.isOperator('|'));
         System.out.println((int)'|');
+        System.out.println("--------------------------");
+        vec = new Vector(comp);
+        vec1 = new Vector(com2);
+        System.out.println(vec.cross(vec1));
     }
 
 }

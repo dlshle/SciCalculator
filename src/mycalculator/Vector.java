@@ -45,7 +45,7 @@ public class Vector {
     }
 
     public Vector add(Vector v) {
-        if (this.dimension != v.getDimension()) {
+        if (this.dimension != v.dimension()) {
             return null;
         }
         double com[] = new double[dimension];
@@ -56,7 +56,7 @@ public class Vector {
     }
 
     public Vector subtract(Vector v) {
-        if (this.dimension != v.getDimension()) {
+        if (this.dimension != v.dimension()) {
             return null;
         }
         double com[] = new double[dimension];
@@ -67,7 +67,7 @@ public class Vector {
     }
 
     public double dot(Vector v) {
-        if (this.dimension != v.getDimension()) {
+        if (this.dimension != v.dimension()) {
             return Double.MIN_VALUE;
         }
         double sum = 0.0;
@@ -89,7 +89,25 @@ public class Vector {
     }
 
     public double cross(Vector v) {
-        //TODO: cross product(+-+-...) the 2nd determinent is reversed
+        if(v.dimension!=dimension)
+            return Double.MIN_VALUE;
+        if(dimension==3){
+            double[][] rows = new double[3][3];
+            for(int i=0;i<3;i++){
+                for(int j=0;j<3;j++){
+                    if(i==0)
+                        rows[i][j]=1;
+                    else if(i==1)
+                        rows[i][j] = components[j];
+                    else
+                        rows[i][j]=v.getComponent(j);
+                }
+            }
+            Matrix det = new Matrix(rows);
+            return det.getDeterminant();
+        }
+        if(dimension==2)
+            return components[0]*v.getComponent(1)-components[1]*v.getComponent(0);
         return Double.MIN_VALUE;
     }
 
@@ -100,7 +118,7 @@ public class Vector {
         return components[index];
     }
 
-    public int getDimension() {
+    public int dimension() {
         return this.dimension;
     }
 
@@ -109,6 +127,15 @@ public class Vector {
             return Double.MIN_VALUE;
         }
         return Math.atan(components[1] / components[0]);
+    }
+    
+    public double getMagnitude(){
+        double mag = 0;
+        for(int i=0;i<dimension;i++){
+            mag += components[i]*components[i];
+        }
+        mag = Math.sqrt(mag);
+        return mag;
     }
 
     public Matrix toMatrix() {
