@@ -2,16 +2,18 @@ package mycalculator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
 
-/** The main class(driver class) of the calculator
- * Ver.01: can do basic number calculations.
+/**
+ * The main class(driver class) of the calculator Ver.01: can do basic number
+ * calculations.
+ *
  * @author dlshle(Xuri Li)
  */
-
 public class MyCalculator {
 
     /*
@@ -24,6 +26,7 @@ public class MyCalculator {
     public static HashMap<String, Function> func_map = new HashMap<>();
     public static HashMap<String, Double> t_reg = new HashMap<>();
     public static HashMap<String, Matrix> m_map = new HashMap<>();
+    public static HashSet<String> operators = new HashSet<>();
 
     //public static String regex_assign = "[A-Za-z]+[0-9]*\\s*=\\s*[0-9]*.?[0-9]+";
     //(abc123=123.456) var name has to be begin with a char end with a char or a num, not num in the middle
@@ -67,7 +70,7 @@ public class MyCalculator {
             return complexAssign(exp);
         } else if (exp.startsWith("list ")) {
             return listOperation(exp.substring(exp.indexOf(' ') + 1));
-        } else if (exp.startsWith("psot ")) {
+        } else if (exp.startsWith("post ")) {
             return postFixCore(exp);
         } else if (exp.equals("matrix test")) {
             testClass.matrixTest(null);
@@ -107,23 +110,27 @@ public class MyCalculator {
             }
         }
         m_map.put(key, new Matrix(rows));
-        return "Matrix "+key+" = \n" + m_map.get(key).toString();
+        return "Matrix " + key + " = \n" + m_map.get(key).toString();
     }
-    
+
     public static String complexAssign(String exp) {
         int index = exp.indexOf('=');
 
         String key = exp.substring(0, index).trim();
 
-        if (key.length() > 256) {
-            return "The length of key should be less than or equal to 256.";
-        } else if (key.matches(regex_reg)) {
-            return key + " is the same format as register(r|R[0-9]{1,2})";
+        if (!isValidKey(key))
+            return "Incorrect key format!";
+        
+        //checking for operators
+        for(int i=0;i<key.length();i++){
+            if(isOperator(key.charAt(i)))
+                return "Key contains illegal characters.";
         }
 
         String svalue = exp.substring(index + 1, exp.length()).trim();
-        if (svalue.startsWith("[") && svalue.endsWith("]")) 
-            return assignMatrix(key,svalue);
+        if (svalue.startsWith("[") && svalue.endsWith("]")) {
+            return assignMatrix(key, svalue);
+        }
         try {
             Double value = Double.valueOf(computExpression(svalue));
             var_map.put(key, value);
@@ -142,7 +149,7 @@ public class MyCalculator {
 
         String key = exp.substring(0, index).trim();
 
-        if (key.length() > 256) {
+        if (isValidKey(key)) {
             return false;
         }
 
@@ -186,14 +193,14 @@ public class MyCalculator {
 
     public static String computExpression(String exp) {
         if (exp.charAt(0) == ')') {
-            exp = "(" + exp.substring(1);
+            exp = "(0)+" + exp.substring(1);
             computExpression(exp);
         }
 
         //see if the first operator is +-*/%
         char first = exp.charAt(0);
 
-        if (isOperator(first) && first == '+' || first == '-' || first == '*' || first == '/' || first == '%') {
+        if (isOperator(first)) {
             if (reg_counter > 0) {
                 double lastVar = reg[reg_counter - 1];
                 exp = (lastVar < 0 ? "_" + (0 - lastVar) : lastVar) + exp;//check if reg[reg_counter-1]<0
@@ -240,6 +247,10 @@ public class MyCalculator {
                             }
                             operator.push(op);
                             break;
+                        case '!':
+                            //factorial
+                            operant.push(MyMath.factorial(operant.pop()));
+                            break;
                         case '(':
                             operator.push(op);
                             break;
@@ -275,9 +286,6 @@ public class MyCalculator {
                         //unknown variable
                         return "Unknown variable " + s;
                     }
-                } else if (s.endsWith("!")) {
-                    //factorial
-                    operant.push(MyMath.factorial(Double.valueOf(s.substring(0, s.length() - 1))));
                 } else if (s.matches(regex_func)) {
                     //using marco
 
@@ -312,6 +320,8 @@ public class MyCalculator {
                 return "Syntax error!";
             }
         } catch (NumberFormatException e) {
+            return "Syntax error!\nIncorrect Number Format!";
+        } catch (Exception ex) {
             return "Syntax error!";
         }
     }
@@ -359,6 +369,10 @@ public class MyCalculator {
                             }
                             operator.push(op);
                             break;
+                        case '!':
+                            //factorial
+                            operant.push(MyMath.factorial(operant.pop()));
+                            break;
                         case '(':
                             operator.push(op);
                             break;
@@ -382,9 +396,6 @@ public class MyCalculator {
                         //unknown variable
                         return "UV";
                     }
-                } else if (s.endsWith("!")) {
-                    //factorial
-                    operant.push(MyMath.factorial(Double.valueOf(s.substring(0, s.length() - 1))));
                 } else if (s.matches(regex_func)) {
                     //using marco
 
@@ -409,10 +420,12 @@ public class MyCalculator {
 
                 return String.valueOf(ans);
             } else {
-                return "SE";
+                return "Syntax Error!";
             }
         } catch (NumberFormatException e) {
-            return "SE";
+            return "Syntax Error!\nIncorrect Number Format!";
+        } catch (Exception ex) {
+            return "Sysntex Error!";
         }
     }
 
@@ -435,6 +448,11 @@ public class MyCalculator {
             for (String s : token) {
                 s = s.trim();
                 if (isOperator(s.charAt(0))) {
+                    if(s.charAt(0)=='!'){
+                        //factorial
+                        operants.push(MyMath.factorial(operants.pop()));
+                        continue;
+                    }
                     operator.push(s.charAt(0));
                     processOperation(operants, operator);
                 } else if (s.charAt(0) >= 65 && s.charAt(0) <= 90 || s.charAt(0) >= 97 && s.charAt(0) <= 122) {
@@ -459,9 +477,6 @@ public class MyCalculator {
                         //unknown variable
                         return "Unknown variable " + s;
                     }
-                } else if (s.endsWith("!")) {
-                    //factorial
-                    operants.push(MyMath.factorial(Double.valueOf(s.substring(0, s.length() - 1))));
                 } else if (s.matches(regex_func)) {
                     //using marco
 
@@ -491,37 +506,50 @@ public class MyCalculator {
 
             return String.valueOf(ans);
         } catch (NumberFormatException e) {
-            return "Syntax error!";
+            return "Syntax error!\nIncorrect Number Format!";
+        } catch (Exception ex) {
+            return "Syntax Error!";
         }
     }
 
     //will do the matrix part here
     public static void processOperation(Stack<Double> operant, Stack<Character> operator) {
-        char op = operator.pop();
-        double a = operant.pop();
-        double b = operant.pop();
+        try {
+            char op = operator.pop();
+            double a = operant.pop();
+            double b = operant.pop();
 
-        switch (op) {
-            case '+':
-                operant.push(a + b);
-                return;
-            case '-':
-                operant.push(b - a);
-                return;
-            case '*':
-                operant.push(a * b);
-                return;
-            case '/':
-                operant.push(b / a);
-                return;
-            case '%':
-                operant.push(b % a);
-                return;
-            case '^':
-                operant.push(Math.pow(b, a));
-                return;
-            default:
-                return;
+            switch (op) {
+                case '+':
+                    operant.push(a + b);
+                    return;
+                case '-':
+                    operant.push(b - a);
+                    return;
+                case '*':
+                    operant.push(a * b);
+                    return;
+                case '/':
+                    operant.push(b / a);
+                    return;
+                case '%':
+                    operant.push(b % a);
+                    return;
+                case '^':
+                    operant.push(Math.pow(b, a));
+                    return;
+                case '!':
+                    operant.push(a);
+                    operant.push(MyMath.factorial(b));
+                    return ;
+                default:
+                    return;
+            }
+        } catch (Exception ex) {
+            operant.removeAllElements();
+            operator.removeAllElements();
+            operant.push(0.0);
+            return;
         }
     }
 
@@ -582,6 +610,16 @@ public class MyCalculator {
         return result + "i" + (len - index - 1);
     }
 
+    public static int occurance(char c, String s) {
+        int occ = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (c == s.charAt(i)) {
+                occ++;
+            }
+        }
+        return occ;
+    }
+
     public static ArrayList<ArrayList<String>> captureGroups(String expression, char left, char right) {
         ArrayList<ArrayList<String>> groups = new ArrayList<>();
         int degree = 0;
@@ -633,12 +671,12 @@ public class MyCalculator {
             lastIndex = lindex;
             //get the next left index
             lindex = expression.substring(lindex + 1).indexOf(left);
-            
+
             if (lindex == -1) {
                 return groups;
             }
-            
-             lindex += lastIndex + 1;
+
+            lindex += lastIndex + 1;
             //initialize degree and maxdegree
             degree = 1;
             maxDegree = 1;
@@ -666,16 +704,17 @@ public class MyCalculator {
         }
         return groups;
     }
-    
-    public static void printGroups(ArrayList<ArrayList<String>> groups){
+
+    public static void printGroups(ArrayList<ArrayList<String>> groups) {
         System.out.println("There are " + groups.size() + " degree groups.");
-        for(int i=groups.size()-1;i>-1;i++){
-            System.out.println("Degree:"+i);
-            for(int j=0;j<groups.get(i).size();j++)
-                System.out.println("\t"+groups.get(i).get(j));
+        for (int i = groups.size() - 1; i > -1; i++) {
+            System.out.println("Degree:" + i);
+            for (int j = 0; j < groups.get(i).size(); j++) {
+                System.out.println("\t" + groups.get(i).get(j));
+            }
         }
     }
-    
+
     public static double[] parseStringsToDoubles(String[] numbers) {
         double[] dnumbers = new double[numbers.length];
         try {
@@ -728,11 +767,29 @@ public class MyCalculator {
 
     public static boolean isOperator(char c) {
         //37-45 47 60 61 62 94
-        if ((c >= 37 && c <= 45) || c == 47 || (c >= 60 && c <= 62) || c == 94) {
+        if ((c >= 37 && c <= 45) || c == 47 || c==33 || c==124 || (c >= 60 && c <= 62) || c == 94) {
             return true;
         } else {
             return false;
         }
+    }
+    
+    public static boolean isValidKey(String key){
+        if (key.length() > 256) 
+            return false;
+        else if (key.matches(regex_reg)) 
+            return false;
+        //number can not be the beginning of the key
+        if(key.charAt(0)>47&&key.charAt(0)<58)
+            return false;
+        char c;
+        //checking for illegal characters
+        for(int i=0;i<key.length();i++){
+            c = key.charAt(i);
+            if(!((c>=48&&c<=57)||(c>=65&&c<=90)||(c>=97&&c<=122)))
+                return false;
+        }
+        return true;
     }
 
     public static void printREG() {

@@ -133,27 +133,27 @@ public class testClass {
         System.out.println(m);
         System.out.println(m.isRREF());        
          */
-        double comp[] = {1,3,5.678};
+        double comp[] = {1, 3, 5.678};
         Vector vec = new Vector(comp);
         System.out.println(vec);
         //one col matrix
-        double ents[][] = {{1},{2},{3}};
+        double ents[][] = {{1}, {2}, {3}};
         Matrix mat = new Matrix(ents);
         System.out.println(mat);
         System.out.println(vec.toMatrix());
-        double com2[] = {2.678,4.123,6.12};
+        double com2[] = {2.678, 4.123, 6.12};
         Vector vec1 = new Vector(com2);
         System.out.println(vec.add(vec1));
         System.out.println(vec.subtract(vec1));
         System.out.println(vec.dot(vec1));
         System.out.println(vec.scalarProduct(2.333));
-        
+
         System.out.println("---------------------------");
-        Matrix mm = new Matrix(5,3);
+        Matrix mm = new Matrix(5, 3);
         System.out.println(mm);
         System.out.println("---------------------------");
         System.out.println("diagonal matrix test");
-        double ents1[][] = {{1,0,0,1},{0,2,0,3},{0,0,3,8}};
+        double ents1[][] = {{1, 0, 0, 1}, {0, 2, 0, 3}, {0, 0, 3, 8}};
         mat = new Matrix(ents1);
         System.out.println(mat.isDiagnoal());
         System.out.println(mat);
@@ -164,15 +164,15 @@ public class testClass {
         System.out.println(mat.getDeterminant());
         System.out.println("--------------------------");
         System.out.println("rank and range space(getColSpace) test");
-        double[][] ents2 = {{2,3,5},{6,9,3},{1,3,3,}};
+        double[][] ents2 = {{2, 3, 5}, {6, 9, 3}, {1, 3, 3,}};
         mat = new Matrix(ents2);
         System.out.println(mat);
         System.out.println(mat.getRREF());
         mat.getRank();
-        System.out.println("rank:\n"+mat.getRank());
-        System.out.println("colspace:\n"+mat.getColSpace());
-        System.out.println("nullity:\n"+mat.getNullity());
-        System.out.println("nullspace:\n"+mat.getNullSpace());
+        System.out.println("rank:\n" + mat.getRank());
+        System.out.println("colspace:\n" + mat.getColSpace());
+        System.out.println("nullity:\n" + mat.getNullity());
+        System.out.println("nullspace:\n" + mat.getNullSpace());
         System.out.println("-------------------------");
         System.out.println("transpose and identity matrix");
         System.out.println(mat);
@@ -181,6 +181,8 @@ public class testClass {
         System.out.println("------------------------");
         System.out.println("digitalRoot(24566)");
         System.out.println(MyMath.digitalRoot(24566));
+        System.out.println(MyCalculator.isOperator('|'));
+        System.out.println((int)'|');
     }
-    
+
 }

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Matrix class of the calculator
+/**
+ * Matrix class of the calculator
  *
  * @author dlshle(Xuri Li)
  */
@@ -52,23 +53,23 @@ public class Matrix {
         this.numOfCols = numOfCols;
         this.matrix = matrix;
     }
-    
-    public Matrix(ArrayList<ArrayList<Double>> matrix){
-        if(!matrix.isEmpty()){
+
+    public Matrix(ArrayList<ArrayList<Double>> matrix) {
+        if (!matrix.isEmpty()) {
             this.matrix = new ArrayList<>();
             this.numOfRows = matrix.size();
             this.numOfCols = matrix.get(0).size();
-            for(int i=0;i<numOfRows;i++){
-                if(matrix.get(i).size()!=numOfCols){
+            for (int i = 0; i < numOfRows; i++) {
+                if (matrix.get(i).size() != numOfCols) {
                     this.matrix.add(new ArrayList<>());
-                    for(int j=0;j<numOfCols;j++){
+                    for (int j = 0; j < numOfCols; j++) {
                         this.matrix.get(i).add(matrix.get(i).get(j));
                     }
-                }else{
+                } else {
                     this.matrix.add(matrix.get(i));
                 }
             }
-        }else{
+        } else {
             this.matrix = new ArrayList<>();
             this.numOfCols = 0;
             this.numOfRows = 0;
@@ -113,15 +114,15 @@ public class Matrix {
         }
         return true;
     }
-    
-    public static Matrix getIdentityMatrix(int size){
-        if(!MyMath.isInteger(Math.sqrt(size))){
+
+    public static Matrix getIdentityMatrix(int size) {
+        if (!MyMath.isInteger(Math.sqrt(size))) {
             System.out.println("Invalid size.");
             return null;
         }
         int row = (int) Math.sqrt(size);
         double[][] mat = new double[row][row];
-        for(int i=0;i<row;i++){
+        for (int i = 0; i < row; i++) {
             mat[i][i] = 1;
         }
         return new Matrix(mat);
@@ -497,8 +498,9 @@ public class Matrix {
             System.out.println("ERROR: The matrix is either empty or not square.");
             return 0;
         }
-        if(m.isZero())
+        if (m.isZero()) {
             return 0;
+        }
         if (m.size() == 4) {
             return m.getEntry(0, 1) * m.getEntry(1, 1) - m.getEntry(1, 0) * m.getEntry(0, 1);
         }
@@ -547,22 +549,25 @@ public class Matrix {
         }
         return true;
     }
-    
-    public boolean isInvertable(){
-        if(isSquare()&&getDeterminant()!=0.0)
+
+    public boolean isInvertable() {
+        if (isSquare() && getDeterminant() != 0.0) {
             return true;
+        }
         return false;
     }
-    
-    public boolean isSingular(){
+
+    public boolean isSingular() {
         return !(isInvertable());
     }
-    
-    public boolean isLinearlyIndependent(){
-        if(!isInvertable())
+
+    public boolean isLinearlyIndependent() {
+        if (!isInvertable()) {
             return false;
-        if(numOfRows>numOfCols)
+        }
+        if (numOfRows > numOfCols) {
             return false;
+        }
         Matrix copy = deepCopy();
         copy.RREF();
         //UNFINISHED
@@ -628,7 +633,7 @@ public class Matrix {
 
     /*
     Check if the matrix can lead to the reduced echelon form
-    */
+     */
     public boolean isRREF() {
         if (isZero() || isEmpty()) {
             return true;
@@ -831,90 +836,101 @@ public class Matrix {
         }
         return copy;
     }
-    
-    public boolean hasPivotInCol(int col){
-        for(int i=0;i<numOfRows;i++){
-            if(getEntry(i,col)==0)
+
+    public boolean hasPivotInCol(int col) {
+        for (int i = 0; i < numOfRows; i++) {
+            if (getEntry(i, col) == 0) {
                 continue;
-            if(getEntry(i,col)!=1.0)
+            }
+            if (getEntry(i, col) != 1.0) {
                 return false;
+            }
         }
         return true;
     }
-    
-    public boolean hasFreeVarInCol(int col){
+
+    public boolean hasFreeVarInCol(int col) {
         return !hasPivotInCol(col);
     }
-    
-    public int getRank(){
-        if(isZero()||isEmpty())
+
+    public int getRank() {
+        if (isZero() || isEmpty()) {
             return 0;
-        if(size()==1)
+        }
+        if (size() == 1) {
             return 1;
+        }
         int rank = 0;
         Matrix copy = deepCopy();
         copy.RREF();
-        for(int i=0;i<copy.getNumOfCols();i++){
+        for (int i = 0; i < copy.getNumOfCols(); i++) {
             //find the ones with leading variable
-            if(copy.hasPivotInCol(i))
+            if (copy.hasPivotInCol(i)) {
                 rank++;
+            }
         }
         return rank;
     }
-    
-    public Set<Vector> getColSpace(){
+
+    public Set<Vector> getColSpace() {
         HashSet<Vector> set = new HashSet<>();
-        if(isZero()||isEmpty())
+        if (isZero() || isEmpty()) {
             return null;
-        if(size()==1){
+        }
+        if (size() == 1) {
             //since it's not all zero row/col
             set.add(new Vector(getCol(0)));
             return set;
         }
         Matrix copy = deepCopy();
         copy.RREF();
-        for(int i=0;i<copy.getNumOfCols();i++){
-            if(copy.hasPivotInCol(i))
+        for (int i = 0; i < copy.getNumOfCols(); i++) {
+            if (copy.hasPivotInCol(i)) {
                 set.add(new Vector(getCol(i)));
+            }
         }
         return set;
     }
-    
-    public int getNullity(){
+
+    public int getNullity() {
         return numOfCols - getRank();
     }
-    
-    public Set<Vector> getNullSpace(){
+
+    public Set<Vector> getNullSpace() {
         HashSet<Vector> set = new HashSet<>();
-        if(isEmpty())
+        if (isEmpty()) {
             return null;
-        if(isZero()){
-            for(int i=0;i<numOfCols;i++){
+        }
+        if (isZero()) {
+            for (int i = 0; i < numOfCols; i++) {
                 set.add(new Vector(getCol(i)));
             }
             return set;
         }
         Matrix copy = deepCopy();
         copy.RREF();
-        for(int i=0;i<copy.getNumOfCols();i++){
-            if(copy.hasFreeVarInCol(i))
+        for (int i = 0; i < copy.getNumOfCols(); i++) {
+            if (copy.hasFreeVarInCol(i)) {
                 set.add(new Vector(getCol(i)));
+            }
         }
-        return set;        
+        return set;
     }
-    
-    public HashSet<Double> getEigenvalues(){
+
+    public HashSet<Double> getEigenvalues() {
         return null;
         //UNFINISHED
     }
-    
-    public Matrix getTranspose(){
-        if(isZero())
+
+    public Matrix getTranspose() {
+        if (isZero()) {
             return deepCopy();
-        if(isEmpty())
+        }
+        if (isEmpty()) {
             return null;
+        }
         ArrayList<ArrayList<Double>> rows = new ArrayList<>();
-        for(int i=0;i<numOfCols;i++){
+        for (int i = 0; i < numOfCols; i++) {
             rows.add(getCol(i));
         }
         Matrix result = new Matrix(rows);
@@ -956,9 +972,9 @@ public class Matrix {
 
     public Matrix deepCopy() {
         ArrayList<ArrayList<Double>> copyList = new ArrayList<>();
-        for(int i=0;i<numOfRows;i++){
+        for (int i = 0; i < numOfRows; i++) {
             copyList.add(new ArrayList<Double>());
-            for(int j=0;j<numOfCols;j++){
+            for (int j = 0; j < numOfCols; j++) {
                 copyList.get(i).add(matrix.get(i).get(j));
             }
         }

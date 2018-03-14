@@ -1,8 +1,8 @@
 package mycalculator;
 
-
-/**Decimal Numbers class of the calculator
- *Not yet finished
+/**
+ * Decimal Numbers class of the calculator Not yet finished
+ *
  * @author dlshle(Xuri Li)
  */
 public class DecNumber {
@@ -86,36 +86,38 @@ public class DecNumber {
         this.numbers = num;
         this.decimals = dec;
     }
-    
-    public static char[] mergeArr(char[] a, char[] b){
-        if(a.length!=b.length)
+
+    public static char[] mergeArr(char[] a, char[] b) {
+        if (a.length != b.length) {
             return new char[1];
-        
-        char[] result = new char[a.length+b.length];
-        
-        for(int i=0;i<a.length;i++){
-            result[i]=a[i];
         }
-        
-        for(int i=a.length;i<result.length;i++){
-            result[i]=b[i-a.length];
+
+        char[] result = new char[a.length + b.length];
+
+        for (int i = 0; i < a.length; i++) {
+            result[i] = a[i];
         }
-        
+
+        for (int i = a.length; i < result.length; i++) {
+            result[i] = b[i - a.length];
+        }
+
         return result;
     }
-    
-    public static char[] arrCopy(char[] original, int from){
-        if(from>=original.length)
+
+    public static char[] arrCopy(char[] original, int from) {
+        if (from >= original.length) {
             return original;
-        char[] result = new char[original.length-from];
-        
-        for(int i=0;i<result.length;from++){
-            result[i++]=original[from];
         }
-        
+        char[] result = new char[original.length - from];
+
+        for (int i = 0; i < result.length; from++) {
+            result[i++] = original[from];
+        }
+
         return result;
     }
-    
+
     public static char[] fillShortFront(char[] a, char[] b) {
         char[] result;
         char[] l;
@@ -129,7 +131,7 @@ public class DecNumber {
                 l = b;
                 s = a;
             }
-            
+
             int lenDiff = l.length - s.length;
             char[] ss = new char[l.length];
 
@@ -137,47 +139,48 @@ public class DecNumber {
                 ss[i] = '0';
             }
 
-            for (int i = lenDiff, counter = 0; counter<s.length; i++,counter++) {
+            for (int i = lenDiff, counter = 0; counter < s.length; i++, counter++) {
                 ss[i] = s[counter];
             }
-            
+
             return ss;
         } else {
             return a;
         }
     }
-    
-    public static char[] fillShortBack(char[] a, char[] b){
+
+    public static char[] fillShortBack(char[] a, char[] b) {
         char[] result;
         char[] l;
         char[] s;
-        
-        if(a.length>=b.length){
+
+        if (a.length >= b.length) {
             l = a;
             s = b;
-        }else{
+        } else {
             l = b;
             s = a;
         }
-        
+
         char[] ss = new char[l.length];
-                
-        for(int i=0;i<s.length;i++){
-            ss[i]=s[i];
+
+        for (int i = 0; i < s.length; i++) {
+            ss[i] = s[i];
         }
-        
-        for(int i=s.length;i<ss.length;i++){
-            ss[i]='0';
+
+        for (int i = s.length; i < ss.length; i++) {
+            ss[i] = '0';
         }
-        
+
         return ss;
-     }
-    
-    public static char[] longestChar(char[] a, char[] b){
-        if(a.length>=b.length)
+    }
+
+    public static char[] longestChar(char[] a, char[] b) {
+        if (a.length >= b.length) {
             return a;
-        else
+        } else {
             return b;
+        }
     }
 
     public static DecNumber absVal(DecNumber n) {
@@ -203,10 +206,10 @@ public class DecNumber {
     public static DecNumber quotient(DecNumber a, DecNumber b) {
         return a.divide(b);
     }
-    
+
     //returns an arr with the position of dot in the front
     //HAS LOGICAL ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public static char[] NumberAdd(DecNumber add, DecNumber adder){
+    public static char[] NumberAdd(DecNumber add, DecNumber adder) {
         char[] numa = add.numbers;
         char[] numb = adder.numbers;
         char[] deca = add.decimals;
@@ -246,17 +249,17 @@ public class DecNumber {
         }
 
         if (sum == 1) {
-            ans[1] = '1';            
+            ans[1] = '1';
         } else {
             ans = arrCopy(ans, 1);
             dotIndex--;
         }
-        
-        ans[0]=(char)(dotIndex+'0');
-        
+
+        ans[0] = (char) (dotIndex + '0');
+
         return ans;
     }
-    
+
     public static char[] decimalCharAdd(char[] a, char[] b) {
         int na = 0, nb = 0;
         char l[];
@@ -317,27 +320,28 @@ public class DecNumber {
 
         return result;
     }
-    
-    public static char[] numberCharAdd(char[] a, char[] b){
+
+    public static char[] numberCharAdd(char[] a, char[] b) {
         char[] lo = longestChar(a, b);
         char[] so = fillShortFront(a, b);
-        
+
         char[] result = decimalCharAdd(lo, so);
-        
-        if(result[0]=='+')
-            result[0]='1';
-        else
+
+        if (result[0] == '+') {
+            result[0] = '1';
+        } else {
             result = arrCopy(result, 1);
-        
+        }
+
         return result;
     }
 
     public static char[] decimalAdd(DecNumber a, DecNumber b) {
         return decimalCharAdd(a.decimals, b.decimals);
     }
-    
+
     public static char[] intAdd(DecNumber a, DecNumber b) {
-        return numberCharAdd(a.numbers,b.numbers);
+        return numberCharAdd(a.numbers, b.numbers);
     }
 
     public char[] splitLongInteger(long num) {
@@ -357,7 +361,6 @@ public class DecNumber {
         return nums;
     }
 
-    
     public DecNumber add(DecNumber n) {
         if (this.sign && (!n.sign)) {
             return subtract(n);
@@ -373,34 +376,34 @@ public class DecNumber {
         if (n.isInt()) {
             result.decimals = arrCopy(decimals, 0);
         }
-        
+
         //do decimal parts
         char[] decResult = decimalAdd(this, n);
-        
+
         //number increamenting and computing
-        if(decResult[0]=='+'){
-            
-        }else{
-            
+        if (decResult[0] == '+') {
+
+        } else {
+
         }
-        
+
         //another way
         DecNumber temp = new DecNumber();
         char[] ans = NumberAdd(this, n);
-        int dotIndex = (int)(ans[0]-'0');
-        
-        temp.numbers = new char[dotIndex-1];
-        temp.decimals = new char[ans.length-dotIndex];
-        
-        for(int i=1, counter=0;i<dotIndex;i++, counter++){
-            temp.numbers[counter]=ans[i];
+        int dotIndex = (int) (ans[0] - '0');
+
+        temp.numbers = new char[dotIndex - 1];
+        temp.decimals = new char[ans.length - dotIndex];
+
+        for (int i = 1, counter = 0; i < dotIndex; i++, counter++) {
+            temp.numbers[counter] = ans[i];
         }
-        
-        for(int i=dotIndex, counter=0;i<ans.length;i++, counter++){
-            temp.decimals[counter]=ans[i];
+
+        for (int i = dotIndex, counter = 0; i < ans.length; i++, counter++) {
+            temp.decimals[counter] = ans[i];
         }
-        
-        return temp;     
+
+        return temp;
 
     }
 
