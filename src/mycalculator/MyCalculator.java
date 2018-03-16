@@ -249,7 +249,10 @@ public class MyCalculator {
                             break;
                         case '!':
                             //factorial
-                            operant.push(MyMath.factorial(operant.pop()));
+                            double result = MyMath.factorial(operant.pop());
+                            if(result==-1)
+                                return "ERROR!\nParameter of a factorial should be positive number!";
+                            operant.push(result);
                             break;
                         case '(':
                             operator.push(op);
@@ -370,8 +373,10 @@ public class MyCalculator {
                             operator.push(op);
                             break;
                         case '!':
-                            //factorial
-                            operant.push(MyMath.factorial(operant.pop()));
+                            double result = MyMath.factorial(operant.pop());
+                            if(result==-1)
+                                return "ERROR!\nParameter of a factorial should be positive number!";
+                            operant.push(result);
                             break;
                         case '(':
                             operator.push(op);
@@ -449,8 +454,10 @@ public class MyCalculator {
                 s = s.trim();
                 if (isOperator(s.charAt(0))) {
                     if(s.charAt(0)=='!'){
-                        //factorial
-                        operants.push(MyMath.factorial(operants.pop()));
+                            double result = MyMath.factorial(operants.pop());
+                            if(result==-1)
+                                return "ERROR!\nParameter of a factorial should be positive number!";
+                            operants.push(result);
                         continue;
                     }
                     operator.push(s.charAt(0));
@@ -513,7 +520,7 @@ public class MyCalculator {
     }
 
     //will do the matrix part here
-    public static void processOperation(Stack<Double> operant, Stack<Character> operator) {
+    public static boolean processOperation(Stack<Double> operant, Stack<Character> operator) {
         try {
             char op = operator.pop();
             double a = operant.pop();
@@ -522,34 +529,37 @@ public class MyCalculator {
             switch (op) {
                 case '+':
                     operant.push(a + b);
-                    return;
+                    return true;
                 case '-':
                     operant.push(b - a);
-                    return;
+                    return true;
                 case '*':
                     operant.push(a * b);
-                    return;
+                    return true;
                 case '/':
                     operant.push(b / a);
-                    return;
+                    return true;
                 case '%':
                     operant.push(b % a);
-                    return;
+                    return true;
                 case '^':
                     operant.push(Math.pow(b, a));
-                    return;
+                    return true;
                 case '!':
                     operant.push(a);
+                    double result = MyMath.factorial(b);
+                    if(result==-1)
+                            throw new Exception("Invalid parameter");
                     operant.push(MyMath.factorial(b));
-                    return ;
+                    return true;
                 default:
-                    return;
+                    return true;
             }
         } catch (Exception ex) {
             operant.removeAllElements();
             operator.removeAllElements();
             operant.push(0.0);
-            return;
+            return false;
         }
     }
 

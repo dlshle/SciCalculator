@@ -43,6 +43,8 @@ public class MyMath {
     }
 
     public static double factorial(double n) {
+        if(!isInteger(n)||n<0)
+            return -1;
         int remain = (int) n;
 
         if (remain == 0 || remain == 1) {
