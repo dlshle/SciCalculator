@@ -153,7 +153,7 @@ public class testClass {
         System.out.println(mm);
         System.out.println("---------------------------");
         System.out.println("diagonal matrix test");
-        double ents1[][] = {{1, 0, 0, 1}, {0, 2, 0, 3}, {0, 0, 3, 8}};
+        double ents1[][] = {{1, 0, 0}, {0, 2, 0}, {0, 0, 3}};
         mat = new Matrix(ents1);
         System.out.println(mat.isDiagnoal());
         System.out.println(mat);
@@ -188,6 +188,14 @@ public class testClass {
         vec1 = new Vector(com2);
         System.out.println(vec.cross(vec1));
         System.out.println(vec.crossProduct(vec1));
+        System.out.println("--------------------------");
+        System.out.println("Test multiply");
+        mat = new Matrix(ents1);
+        mm = new Matrix(ents2);
+        System.out.println(mat);
+        System.out.println(mm);
+        System.out.println(mat.multiply(mm));
+        System.out.println("-------------------------");
     }
 
 }

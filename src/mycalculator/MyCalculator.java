@@ -41,14 +41,14 @@ public class MyCalculator {
         Scanner input = new Scanner(System.in);
         System.out.println("Xuri's calculator:\n"
                 + "Input expression and press enter to compute."
-                + "\nInput stop to exit the program."
+                + "\nInput exit to exit the program."
                 + "\nTo input a negative number, use \"_\" as the negative sign.");
 
         String exp = input.nextLine();
 
         init();
 
-        while (!exp.toLowerCase().trim().equals("stop")) {
+        while (!exp.toLowerCase().trim().equals("exit")) {
             if (exp.equals("list reg")) {
                 printREG();
             } else {

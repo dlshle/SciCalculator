@@ -248,6 +248,23 @@ public class Matrix {
         return new Matrix(matrix);
     }
 
+    public Matrix multiply(Matrix m) {
+        if (numOfCols != m.getNumOfRows()) {
+            return null;
+        }
+        double[][] matrix = new double[numOfRows][m.getNumOfCols()];
+        Vector tempRow;
+        Vector tempCol;
+        for (int i = 0; i < numOfRows; i++) {
+            for (int j = 0; j < m.getNumOfCols(); j++) {
+                tempRow = new Vector(getRow(i));
+                tempCol = new Vector(m.getCol(j));
+                matrix[i][j] = tempRow.dot(tempCol);
+            }
+        }
+        return new Matrix(matrix);
+    }
+
     public Matrix scalarProduct(double val) {
         double[][] matrix = new double[numOfRows][numOfCols];
         for (int i = 0; i < numOfRows; i++) {
