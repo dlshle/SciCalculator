@@ -195,7 +195,7 @@ public class testClass {
         System.out.println(mat);
         System.out.println(mm);
         System.out.println(mat.multiply(mm));
-        System.out.println("-------------------------");
+        System.out.println  ("-------------------------");
     }
 
 }
